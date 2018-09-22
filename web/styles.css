@@ -6,6 +6,7 @@ body {
     margin: 0;
 }
 
+/* Header Styling */
 .header-global {
     position: static;
     top: 1rem;
@@ -17,6 +18,7 @@ body {
 }
 .header-global h1 {
     text-align: center;
+    margin: 0;
 }
 .header-global a {
     color: #fff;
@@ -26,6 +28,7 @@ body {
     color: #63554D;
 }
 
+/* Content Styling */
 .home-content {
     display: block;
     font-family: 'Josefin Slab', serif;
@@ -33,12 +36,32 @@ body {
     max-width: 100vw;
     overflow: hidden;
     left: 0;
+    padding: 0 20px;
 }
 
 .home-content h1 {
     font-family: 'Sacramento', cursive;
 }
+.home-content h4 {
+    color: red;
+    font-weight: bold;
+}
+.home-content button {
+    padding: 10px;
+    border: #EA6464 solid 1px;
+}
+.home-content button:hover {
+    background-color: #EA6464;
+    color: #fff;
+}
+.home-content button, .home-content input {
+    background-color: #fff;
+    padding: 10px;
+    font-family: 'Josefin Slab', serif;
+    font-size: 1rem;
+}
 
+/* Footer Styling */
 .footer-global {
     padding: 3rem 0 4rem;
     text-align: center;

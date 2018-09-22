@@ -5,6 +5,17 @@
         {% include '/components/header.html.twig' %}
         <div class="home-content" id="main">
             <h1>Profit Calculator</h1>
+            <h3>To get started, upload your csv file containing a header and the sku, cost, price, and quantity data for your products below.</h3>
+            {% if blank_form is not empty %}
+                <h4>Please re-submit your file! The file needs to be a .csv file type.</h4>
+            {% endif %}
+            <form method="post" action="/upload-csv">
+                <label for="file">Your CSV file:</label>
+                <input type="file" name="file" id="file" placeholder="CSV file" required>
+                <br><br>
+                <button class="btn" type="submit" id="add-csv"><i class="fa fa-upload" aria-hidden="true"></i> Give me my data!</button>
+            </form>
+            <h3>This app will process the csv data and output a table displaying your table contents, as well as calculating and displaying the profit margin and total profit in both USD and CAD.</h3>
         </div>
         {% include '/components/footer.html.twig' %}
     </body>
