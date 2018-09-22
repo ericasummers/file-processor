@@ -1,0 +1,50 @@
+html {
+    background-color: #FEF3DB;
+}
+
+body {
+    margin: 0;
+}
+
+.header-global {
+    position: static;
+    top: 1rem;
+    background-color: #EA6464;
+    left: 0;
+    width: 100%;
+    z-index: 5000;
+    font-family: 'Sacramento', cursive;
+}
+.header-global h1 {
+    text-align: center;
+}
+.header-global a {
+    color: #fff;
+    text-decoration: none;
+}
+.header-global a:active, .header-global a:hover {
+    color: #63554D;
+}
+
+.home-content {
+    display: block;
+    font-family: 'Josefin Slab', serif;
+    min-height: 80vh;
+    max-width: 100vw;
+    overflow: hidden;
+    left: 0;
+}
+
+.home-content h1 {
+    font-family: 'Sacramento', cursive;
+}
+
+.footer-global {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    width: 100%;
+    float: left;
+    position: relative;
+    display: block;
+    font-family: 'Josefin Slab', serif;
+}
