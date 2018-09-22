@@ -5,11 +5,6 @@
 
     $app = new Silex\Application();
 
-    $server = 'mysql:host=localhost:8889;dbname=file-processor';
-    $username = 'root';
-    $password = 'root';
-    $DB = new PDO($server, $username, $password);
-
     $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/../views'));
     $app['debug'] = true;
     use Symfony\Component\HttpFoundation\Request;
