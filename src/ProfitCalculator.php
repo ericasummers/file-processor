@@ -29,10 +29,28 @@
                         $output .= $dataCell;
                         $output .= '</th>';
                     }
+                    array_push($headers, 'Profit Margin');
+                    array_push($headers, 'Total Profit (USD)');
+                    array_push($headers, 'Total Profit (CAD)');
+                    $output .= '<th>Profit Margin</th><th>Total Profit (USD)</th><th>Total Profit (CAD)</th>';
                 } else {
-                    foreach($csvRow as $dataCell) {
+                    for ($i = 0; $i < count($headers); $i++) {
                         $output .= '<td>';
-                        $output .= $dataCell;
+
+                        $productPrice = $csvRow[array_search('price', $headers)];
+                        $productCost = $csvRow[array_search('cost', $headers)];
+                        $productQuantity = $csvRow[array_search('qty', $headers)];
+
+                        if ($headers[$i] == 'Profit Margin') {
+                            $output .= $this->get_profit_margin($productPrice, $productQuantity, $productCost);
+                        } else if ($headers[$i] == 'Total Profit (USD)') {
+                            $output .= $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
+                        } else if ($headers[$i] == 'Total Profit (CAD)') {
+                            $output .= 'N/A';
+                        } else {
+                            $output .= $csvRow[$i];
+                        }
+
                         $output .= '</td>';
                     }
                 }
@@ -44,4 +62,19 @@
 
             return $output;
         }
+
+        function get_profit_margin($productPrice, $productQuantity, $productCost) {
+            $totalProfit = $productPrice * $productQuantity;
+            $totalCost = $productCost * $productQuantity;
+            return (($totalProfit - $totalCost) / $totalCost) * 100;
+        }
+
+        function get_total_profit_usd($productPrice, $productQuantity, $productCost) {
+            return ($productPrice * $productQuantity) - ($productCost * $productQuantity);
+        }
+
+        function get_total_profit_cad() {
+
+        }
+
     }
