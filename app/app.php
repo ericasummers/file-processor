@@ -32,14 +32,8 @@
             return $app['twig']->render('home.html.twig', array('error_message' => $error_message));
         } else {
             if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
-                //Open saved csv file and translate to array to output data
-                $handle = fopen($target_file, 'r');
-                if ($handle) {
-                    $new_products_table = new ProfitCalculator($handle);
-                    $csv_table_array = $new_products_table->getCSVArray();
-                } else {
-                    $csv_table_array = 'Unable to open file, please try again.';
-                }
+                $new_products_table = new ProfitCalculator($target_file);
+                $csv_table_array = $new_products_table->parseCSV();
                 return $app['twig']->render('output.html.twig', array('product_table' => $csv_table_array));
             } else {
                 $error_message = 'Error uploading file, check destination is writeable.';
