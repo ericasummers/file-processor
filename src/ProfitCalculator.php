@@ -1,6 +1,14 @@
 <?php
     class ProfitCalculator {
         private $csv_file;
+        private $summedUpPrices;
+        private $totalQty;
+        private $summedUpCosts;
+        private $summedUpProfitMargin;
+        private $totalProfitUSD;
+        private $totalProfitCAD;
+        private $rows;
+
 
         function __construct($file) {
             $this->csv_file = $file;
@@ -43,19 +51,26 @@
 
                         if ($headers[$i] == 'Profit Margin') {
                             $profitMargin = $this->get_profit_margin($productPrice, $productQuantity, $productCost);
-                            $output .= $this->set_color_class($profitMargin) . $profitMargin;
+                            $this->summedUpProfitMargin = $this->summedUpProfitMargin + $profitMargin;
+                            $output .= $this->set_color_class($profitMargin) . $profitMargin . '%';
                         } else if ($headers[$i] == 'Total Profit (USD)') {
                             $total_profit_usd = $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
-                            $output .= $this->set_color_class($total_profit_usd) . $total_profit_usd;
+                            $this->totalProfitUSD = $this->totalProfitUSD + $total_profit_usd;
+                            $output .= $this->set_color_class($total_profit_usd) . $total_profit_usd . ' $';
                         } else if ($headers[$i] == 'Total Profit (CAD)') {
                             $total_profit_cad = $this->get_total_profit_cad($productPrice, $productQuantity, $productCost);
-                            $output .= $this->set_color_class($total_profit_cad) . $total_profit_cad;
+                            $this->totalProfitCAD = $this->totalProfitCAD + $total_profit_cad;
+                            $output .= $this->set_color_class($total_profit_cad) . $total_profit_cad . ' C$';
                         } else if ($headers[$i] == 'qty') {
-                            $output .= $this->set_color_class($csvRow[$i]);
-                            $output .= $csvRow[$i];
+                            $this->totalQty = $this->totalQty + $csvRow[$i];
+                            $output .= $this->set_color_class($csvRow[$i]) . $csvRow[$i];
                         } else {
-                            $output .= '<td>';
-                            $output .= $csvRow[$i];
+                            if ($headers[$i] == 'price') {
+                                $this->summedUpPrices = $this->summedUpPrices + $csvRow[$i];
+                            } else {
+                                $this->summedUpCosts = $this->summedUpCosts + (int) $csvRow[$i];
+                            }
+                            $output .= '<td>' . $csvRow[$i];
                         }
 
                         $output .= '</td>';
@@ -64,6 +79,34 @@
                 $row++;
                 $output .= '</tr>';
             }
+            
+            //Add final totals to last row of table
+            $this->rows = $row - 2;
+            $output .= '<tr>';
+            for ($j = 0; $j < count($headers); $j++) {
+                $output .= '<td class="totals">';
+                if ($headers[$j] == 'Profit Margin') {
+                    $output .= round($this->summedUpProfitMargin / $this->rows, 2) . '%';
+                }
+                if ($headers[$j] == 'Total Profit (USD)') {
+                    $output .= number_format($this->totalProfitUSD, 2) . ' $';
+                }
+                if ($headers[$j] == 'Total Profit (CAD)') {
+                    $output .= number_format($this->totalProfitCAD, 2) . ' C$';
+                }
+                if ($headers[$j] == 'qty') {
+                    $output .= $this->totalQty;
+                }
+                if ($headers[$j] == 'price') {
+                    $output .= number_format($this->summedUpPrices / $this->rows, 2);
+                }
+                if ($headers[$j] == 'cost') {
+                    $output .= number_format($this->summedUpCosts / $this->rows, 2);
+                }
+                $output .= '</td>';
+
+            }
+            $output .= '</tr>';
 
             $output .= '</table>';
 
@@ -73,17 +116,17 @@
         function get_profit_margin($productPrice, $productQuantity, $productCost) {
             $totalProfit = $productPrice * $productQuantity;
             $totalCost = $productCost * $productQuantity;
-            return round((($totalProfit - $totalCost) / $totalCost) * 100, 2) . '%';
+            return round((($totalProfit - $totalCost) / $totalCost) * 100, 2);
         }
 
         function get_total_profit_usd($productPrice, $productQuantity, $productCost) {
-            return number_format(($productPrice * $productQuantity) - ($productCost * $productQuantity), 2) . ' $';
+            return number_format(($productPrice * $productQuantity) - ($productCost * $productQuantity), 2);
         }
 
         function get_total_profit_cad($productPrice, $productQuantity, $productCost) {
             $total_profit_in_usd = $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
             $currency_exchange_rate = $this->get_currency_usd_to_cad_rate();
-            return number_format($total_profit_in_usd * $currency_exchange_rate, 2) . ' C$';
+            return number_format($total_profit_in_usd * $currency_exchange_rate, 2);
         }
 
         function get_currency_usd_to_cad_rate() {

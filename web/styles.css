@@ -100,6 +100,10 @@ body {
     color: #F74634;
     background-color: #eab1b1;
 }
+.home-content td.totals {
+    color: #fff;
+    background-color: #79a4da;
+}
 
 /* Footer Styling */
 .footer-global {
