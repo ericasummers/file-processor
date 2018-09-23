@@ -14,11 +14,12 @@ body {
     left: 0;
     width: 100%;
     z-index: 5000;
-    font-family: 'Sacramento', cursive;
+    font-family: 'Dancing Script', cursive;
 }
 .header-global h1 {
     text-align: center;
     margin: 0;
+    padding: 5px;
 }
 .header-global a {
     color: #fff;
@@ -31,7 +32,7 @@ body {
 /* Content Styling */
 .home-content {
     display: block;
-    font-family: 'Josefin Slab', serif;
+    font-family: 'Roboto', sans-serif;
     min-height: 80vh;
     max-width: 100vw;
     overflow: hidden;
@@ -40,7 +41,7 @@ body {
 }
 
 .home-content h1 {
-    font-family: 'Sacramento', cursive;
+    font-family: 'Dancing Script', cursive;
 }
 .home-content h4 {
     color: red;
@@ -57,8 +58,47 @@ body {
 .home-content button, .home-content input {
     background-color: #fff;
     padding: 10px;
-    font-family: 'Josefin Slab', serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
+}
+.home-content table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+.home-content table, th, td {
+    border: solid 2px #63554D;
+}
+.home-content tr {
+    font-weight: bold;
+    font-size: 1.5rem;
+    min-width: 80px;
+}
+.home-content td {
+    background-color: rgba(0,0,0,0.2);
+}
+.home-content th {
+    font-family: 'Dancing Script', cursive;
+    padding: 5px 20px;
+    background-color: #cc9585;
+}
+.home-content td {
+    font-family: 'Roboto', sans-serif;
+    min-width: 80px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 1.2rem;
+    padding: 5px 20px;
+}
+.home-content td:first-of-type {
+    text-align: left;
+}
+.home-content td.positive {
+    color: #138835;
+    background-color: #86cea6;
+}
+.home-content td.negative {
+    color: #F74634;
+    background-color: #eab1b1;
 }
 
 /* Footer Styling */
@@ -69,5 +109,5 @@ body {
     float: left;
     position: relative;
     display: block;
-    font-family: 'Josefin Slab', serif;
+    font-family: 'Roboto', sans-serif;
 }
