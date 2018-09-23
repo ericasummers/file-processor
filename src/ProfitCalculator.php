@@ -22,6 +22,7 @@
             $row = 1;
             foreach($csvArray as $csvRow) {
                 $output .= '<tr>';
+                // Header Row setting up columns
                 if ($row == 1) {
                     foreach($csvRow as $dataCell) {
                         array_push($headers, $dataCell);
@@ -33,6 +34,7 @@
                     array_push($headers, 'Total Profit (USD)');
                     array_push($headers, 'Total Profit (CAD)');
                     $output .= '<th>Profit Margin</th><th>Total Profit (USD)</th><th>Total Profit (CAD)</th>';
+                // All other data rows
                 } else {
                     for ($i = 0; $i < count($headers); $i++) {
                         $output .= '<td>';
@@ -46,7 +48,7 @@
                         } else if ($headers[$i] == 'Total Profit (USD)') {
                             $output .= $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
                         } else if ($headers[$i] == 'Total Profit (CAD)') {
-                            $output .= 'N/A';
+                            $output .= $this->get_total_profit_cad($productPrice, $productQuantity, $productCost);
                         } else {
                             $output .= $csvRow[$i];
                         }
@@ -66,15 +68,28 @@
         function get_profit_margin($productPrice, $productQuantity, $productCost) {
             $totalProfit = $productPrice * $productQuantity;
             $totalCost = $productCost * $productQuantity;
-            return (($totalProfit - $totalCost) / $totalCost) * 100;
+            return round((($totalProfit - $totalCost) / $totalCost) * 100, 2) . '%';
         }
 
         function get_total_profit_usd($productPrice, $productQuantity, $productCost) {
-            return ($productPrice * $productQuantity) - ($productCost * $productQuantity);
+            return number_format(($productPrice * $productQuantity) - ($productCost * $productQuantity), 2) . ' $';
         }
 
-        function get_total_profit_cad() {
+        function get_total_profit_cad($productPrice, $productQuantity, $productCost) {
+            $total_profit_in_usd = $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
+            $currency_exchange_rate = $this->get_currency_usd_to_cad_rate();
+            return number_format($total_profit_in_usd * $currency_exchange_rate, 2) . ' C$';
+        }
 
+        function get_currency_usd_to_cad_rate() {
+            $curl = curl_init('http://free.currencyconverterapi.com/api/v5/convert?q=USD_CAD&compact=y');
+            curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $json_result = curl_exec($curl);
+            $result = json_decode($json_result, true);
+            curl_close($curl);
+
+            return $result['USD_CAD']['val'];
         }
 
     }
