@@ -37,19 +37,24 @@
                 // All other data rows
                 } else {
                     for ($i = 0; $i < count($headers); $i++) {
-                        $output .= '<td>';
-
                         $productPrice = $csvRow[array_search('price', $headers)];
                         $productCost = $csvRow[array_search('cost', $headers)];
                         $productQuantity = $csvRow[array_search('qty', $headers)];
 
                         if ($headers[$i] == 'Profit Margin') {
-                            $output .= $this->get_profit_margin($productPrice, $productQuantity, $productCost);
+                            $profitMargin = $this->get_profit_margin($productPrice, $productQuantity, $productCost);
+                            $output .= $this->set_color_class($profitMargin) . $profitMargin;
                         } else if ($headers[$i] == 'Total Profit (USD)') {
-                            $output .= $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
+                            $total_profit_usd = $this->get_total_profit_usd($productPrice, $productQuantity, $productCost);
+                            $output .= $this->set_color_class($total_profit_usd) . $total_profit_usd;
                         } else if ($headers[$i] == 'Total Profit (CAD)') {
-                            $output .= $this->get_total_profit_cad($productPrice, $productQuantity, $productCost);
+                            $total_profit_cad = $this->get_total_profit_cad($productPrice, $productQuantity, $productCost);
+                            $output .= $this->set_color_class($total_profit_cad) . $total_profit_cad;
+                        } else if ($headers[$i] == 'qty') {
+                            $output .= $this->set_color_class($csvRow[$i]);
+                            $output .= $csvRow[$i];
                         } else {
+                            $output .= '<td>';
                             $output .= $csvRow[$i];
                         }
 
@@ -90,6 +95,14 @@
             curl_close($curl);
 
             return $result['USD_CAD']['val'];
+        }
+
+        function set_color_class($number) {
+            if ($number > 0) {
+                return '<td class="positive">';
+            } else {
+                return '<td class="negative">';
+            }
         }
 
     }
